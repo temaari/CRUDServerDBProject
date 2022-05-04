@@ -5,7 +5,7 @@ const USERS = require('../models/BasicUser')
 
 router.get('/', async (req, res) => {
     try {
-        const users = await USERS.find({})
+        const users = await findFirstOrDefault(req.query.id)
         res.json(users)
     } catch (error) {
         res.redirect('/')
@@ -15,5 +15,10 @@ router.get('/', async (req, res) => {
 router.get('/new', (req, res) => {
     res.send('Create new user')
 })
+
+async function findFirstOrDefault(id) {
+    if (id) return await USERS.findById(id) 
+    return await USERS.find({})
+}
 
 module.exports = router
